@@ -1,20 +1,20 @@
 package com.craftinginterpreters.lox;
 
 enum TokenType {
-  // Single-character tokens.
+  // 单字符 tokens
   LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
   COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
 
-  // One or two character tokens.
+  // 一个或两个字符 tokens
   BANG, BANG_EQUAL,
   EQUAL, EQUAL_EQUAL,
   GREATER, GREATER_EQUAL,
   LESS, LESS_EQUAL,
 
-  // Literals.
+  // 字面量
   IDENTIFIER, STRING, NUMBER,
 
-  // Keywords.
+  // 关键字
   AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
   PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
 
