@@ -14,6 +14,7 @@ public class Lox {
   public static void main(String[] args) throws IOException {
     if (args.length > 1) {
       System.out.println("Usage: jlox [script]");
+      // 在 Unix sysexits.h 里，64 通常表示“命令行用法错误”，也就是参数传错了。
       System.exit(64);
     } else if (args.length == 1) {
       runFile(args[0]);
@@ -26,8 +27,10 @@ public class Lox {
     byte[] bytes = Files.readAllBytes(Paths.get(path));
     run(new String(bytes, Charset.defaultCharset()));
 
-    // Indicate an error in the exit code.
+    // 通过退出码表示程序出错了
     if (hadError)
+      // 在 Unix sysexits.h 里，65 通常表示“输入数据格式错误”。
+      // 在 jlox 里它表示：用户写的 Lox 源码有语法/扫描错误。
       System.exit(65);
   }
 
@@ -49,7 +52,7 @@ public class Lox {
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
 
-    // For now, just print the tokens.
+    // 从现在开始，只打印 tokens
     for (Token token : tokens) {
       System.out.println(token);
     }
