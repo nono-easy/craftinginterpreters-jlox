@@ -7,14 +7,21 @@ import java.util.Map;
 
 import static com.craftinginterpreters.lox.TokenType.*;
 
+/**
+ * 用于把源码字符串切割成一串 Token
+ * Scanner
+ */
 class Scanner {
+    /* 完整源码文本 */
     private final String source;
+    /* Token 列表 */
     private final List<Token> tokens = new ArrayList<>();
 
     private int start = 0;
     private int current = 0;
     private int line = 1;
 
+    /* 关键字表 */
     private static final Map<String, TokenType> keywords;
 
     static {
@@ -43,7 +50,7 @@ class Scanner {
 
     List<Token> scanTokens() {
         while (!isAtEnd()) {
-            // We are at the beginning of the next lexeme.
+            // 处于下一个原始文本的最开始位置
             start = current;
             scanToken();
         }
@@ -55,6 +62,7 @@ class Scanner {
     private void scanToken() {
         char c = advance();
         switch (c) {
+            // 单字符 token
             case '(':
                 addToken(LEFT_PAREN);
                 break;
@@ -86,6 +94,8 @@ class Scanner {
                 addToken(STAR);
                 break;
 
+            // 可能是一个或者两个字段的token
+            // match()：看当前未消费字符，如果符合，就移动 current
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
@@ -101,9 +111,12 @@ class Scanner {
 
             case '/':
                 if (match('/')) {
-                    // A comment goes until the end of the line.
-                    while (peek() != '\n' && !isAtEnd())
+                    // 行注释 直接吃掉整行
+                    // peek() 看当前未消费字符，不移动 current
+                    while (peek() != '\n' && !isAtEnd()){
+                        // advance()：不判断，直接吃当前字符并移动 current
                         advance();
+                    }
                 } else {
                     addToken(SLASH);
                 }
@@ -112,7 +125,7 @@ class Scanner {
             case ' ':
             case '\r':
             case '\t':
-                // Ignore whitespace.
+                // 忽略空格、回车、Tab
                 break;
 
             case '\n':
