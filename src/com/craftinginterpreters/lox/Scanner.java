@@ -8,20 +8,19 @@ import java.util.Map;
 import static com.craftinginterpreters.lox.TokenType.*;
 
 /**
- * 用于把源码字符串切割成一串 Token
- * Scanner
+ * 把源码字符串切割成一串 Token 。
  */
 class Scanner {
-    /* 完整源码文本 */
+    // 完整源码文本
     private final String source;
-    /* Token 列表 */
+    // Token 列表
     private final List<Token> tokens = new ArrayList<>();
 
     private int start = 0;
     private int current = 0;
     private int line = 1;
 
-    /* 关键字表 */
+    // 关键字表
     private static final Map<String, TokenType> keywords;
 
     static {
@@ -113,8 +112,8 @@ class Scanner {
                 if (match('/')) {
                     // 行注释 直接吃掉整行
                     // peek() 看当前未消费字符，不移动 current
-                    while (peek() != '\n' && !isAtEnd()){
-                        // advance()：不判断，直接吃当前字符并移动 current
+                    while (peek() != '\n' && !isAtEnd()) {
+                        // 直接吃当前字符并移动 current
                         advance();
                     }
                 } else {
@@ -148,14 +147,17 @@ class Scanner {
         }
     }
 
+    // 吃掉当前字符，读取并移动
     private char advance() {
         return source.charAt(current++);
     }
 
+    // addToken(TokenType type, Object literal) 简化版
     private void addToken(TokenType type) {
         addToken(type, null);
     }
 
+    // 把“刚刚扫过的这一段源码”正式记录成 token
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
@@ -165,6 +167,7 @@ class Scanner {
         return current >= source.length();
     }
 
+    // 看下一个字符是不是 expected；如果是，移动 current 指针位置
     private boolean match(char expected) {
         if (isAtEnd())
             return false;
@@ -175,16 +178,19 @@ class Scanner {
         return true;
     }
 
+    // 看下个字符，但是不移动 current 指针位置
     private char peek() {
         if (isAtEnd())
             return '\0';
         return source.charAt(current);
     }
 
+    // 判断是否为数字
     private boolean isDigit(char c) {
         return c >= '0' && c <= '9';
     }
 
+    // 处理字符串
     private void string() {
         while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n')
@@ -205,6 +211,7 @@ class Scanner {
         addToken(STRING, value);
     }
 
+    // 处理数字
     private void number() {
         while (isDigit(peek()))
             advance();
@@ -222,12 +229,14 @@ class Scanner {
                 Double.parseDouble(source.substring(start, current)));
     }
 
+    // 往后看第二个字符
     private char peekNext() {
         if (current + 1 >= source.length())
             return '\0';
         return source.charAt(current + 1);
     }
 
+    // 处理标识符
     private void identifier() {
         while (isAlphaNumeric(peek()))
             advance();
@@ -239,12 +248,14 @@ class Scanner {
         addToken(type);
     }
 
+    // 判断是否为字母
     private boolean isAlpha(char c) {
         return (c >= 'a' && c <= 'z') ||
                 (c >= 'A' && c <= 'Z') ||
                 c == '_';
     }
 
+    // 判断是否为字母或数字
     private boolean isAlphaNumeric(char c) {
         return isAlpha(c) || isDigit(c);
     }

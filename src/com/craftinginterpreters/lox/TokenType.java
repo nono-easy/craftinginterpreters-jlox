@@ -2,14 +2,23 @@ package com.craftinginterpreters.lox;
 
 enum TokenType {
   // 单字符 tokens
-  LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
-  COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
+  LEFT_PAREN,    // (
+  RIGHT_PAREN,   // )
+  LEFT_BRACE,    // {
+  RIGHT_BRACE,   // }
+  COMMA,         // ,
+  DOT,           // .
+  MINUS,         // -
+  PLUS,          // +
+  SEMICOLON,     // ;
+  SLASH,         // /
+  STAR,          // *
 
   // 一个或两个字符 tokens
-  BANG, BANG_EQUAL,
-  EQUAL, EQUAL_EQUAL,
-  GREATER, GREATER_EQUAL,
-  LESS, LESS_EQUAL,
+  BANG, BANG_EQUAL,             // !  !=
+  EQUAL, EQUAL_EQUAL,           // =  ==
+  GREATER, GREATER_EQUAL,       // >  >=
+  LESS, LESS_EQUAL,             // <  <=
 
   // 字面量
   IDENTIFIER, STRING, NUMBER,
