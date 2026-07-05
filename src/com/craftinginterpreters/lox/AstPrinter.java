@@ -1,5 +1,7 @@
 package com.craftinginterpreters.lox;
 
+import com.craftinginterpreters.lox.Expr.Literal;
+
 /**
  * 把 AST 树打印成字符串
  * Expr 的访问者
@@ -50,5 +52,27 @@ class AstPrinter implements Expr.Visitor<String> {
         builder.append(")");
 
         return builder.toString();
+    }
+
+    public static void main(String[] args) {
+        // 在这里 new 出 a == b == c 的左结合树，然后：
+        Literal a = new Expr.Literal("a");
+        Literal b = new Expr.Literal("b");
+        Literal c = new Expr.Literal("c");
+
+        Token euqalEqual1 = new Token(TokenType.EQUAL_EQUAL, "==", null, 1);
+        Token euqalEqual2 = new Token(TokenType.EQUAL_EQUAL, "==", null, 1);
+
+        // a == b == c
+        Expr expr = new Expr.Binary(
+                new Expr.Binary(
+                        a,
+                        euqalEqual1,
+                        b),
+                euqalEqual2,
+                c);
+
+        System.out.println(new AstPrinter().print(expr));
+        // (== (== a b) c)
     }
 }
